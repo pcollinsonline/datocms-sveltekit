@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { AuthorFragment, fragment, graphql } from '$houdini';
+	import { AuthorFragment, fragment, graphql } from '$houdini'
 
-	import { Image } from "@datocms/svelte";
+	import { Image } from '@datocms/svelte'
 
-	export let author: AuthorFragment | null = null;
+	export let author: AuthorFragment | null = null
 
 	$: authorFragment = fragment(
 		author,
@@ -22,16 +22,16 @@
 				}
 			}
 		`)
-	);
+	)
 
-	$: name = $authorFragment?.name;
-	$: picture = $authorFragment?.picture;
+	$: name = $authorFragment?.name
+	$: picture = $authorFragment?.picture
 </script>
 
 <div class="flex items-center">
 	{#if picture?.responsiveImage}
 		<div class="w-12 h-12 mr-4">
-			<Image alt={name} data={picture.responsiveImage} class="rounded-full" />
+			<Image alt="{name}" data="{picture.responsiveImage}" class="rounded-full" />
 		</div>
 	{/if}
 	<div class="text-xl font-bold">{name}</div>

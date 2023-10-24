@@ -1,1 +1,1 @@
-export * from './QueryStoreWithPreviewSupport';
+export * from './QueryStoreWithPreviewSupport'

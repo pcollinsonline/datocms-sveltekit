@@ -10,25 +10,25 @@
 		isRoot,
 		isSpan,
 		type Node
-	} from 'datocms-structured-text-utils';
+	} from 'datocms-structured-text-utils'
 
-	import type { StructuredTextFragment$data } from '$houdini';
+	import type { StructuredTextFragment$data } from '$houdini'
 
-	import Paragraph from './nodes/Paragraph.svelte';
-	import Root from './nodes/Root.svelte';
-	import Span from './nodes/Span.svelte';
-	import Link from './nodes/Link.svelte';
-	import List from './nodes/List.svelte';
-	import Heading from './nodes/Heading.svelte';
-	import Blockquote from './nodes/Blockquote.svelte';
-	import Block from './nodes/Block.svelte';
-	import ListItem from './nodes/ListItem.svelte';
+	import Paragraph from './nodes/Paragraph.svelte'
+	import Root from './nodes/Root.svelte'
+	import Span from './nodes/Span.svelte'
+	import Link from './nodes/Link.svelte'
+	import List from './nodes/List.svelte'
+	import Heading from './nodes/Heading.svelte'
+	import Blockquote from './nodes/Blockquote.svelte'
+	import Block from './nodes/Block.svelte'
+	import ListItem from './nodes/ListItem.svelte'
 
-	export let node: Node;
-	export let blocks: StructuredTextFragment$data['blocks'];
+	export let node: Node
+	export let blocks: StructuredTextFragment$data['blocks']
 
 	$: block =
-		(isBlock(node) && (blocks || []).find(({ id }) => isBlock(node) && id === node.item)) || null;
+		(isBlock(node) && (blocks || []).find(({ id }) => isBlock(node) && id === node.item)) || null
 </script>
 
 <!-- Typescript doesn't infer the relationship between the component and `node` prop type.
@@ -36,47 +36,47 @@
 {#if isRoot(node)}
 	<Root>
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</Root>
 {:else if isParagraph(node)}
 	<Paragraph>
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</Paragraph>
 {:else if isLink(node)}
-	<Link {node}>
+	<Link node="{node}">
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</Link>
 {:else if isList(node)}
-	<List {node}>
+	<List node="{node}">
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</List>
 {:else if isListItem(node)}
 	<ListItem>
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</ListItem>
 {:else if isHeading(node)}
-	<Heading {node}>
+	<Heading node="{node}">
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</Heading>
 {:else if isBlockquote(node)}
 	<Blockquote>
 		{#each node.children as child}
-			<svelte:self node={child} {blocks} />
+			<svelte:self node="{child}" blocks="{blocks}" />
 		{/each}
 	</Blockquote>
 {:else if isBlock(node) && block}
-	<Block {block} />
+	<Block block="{block}" />
 {:else if isSpan(node)}
-	<Span {node} />
+	<Span node="{node}" />
 {/if}

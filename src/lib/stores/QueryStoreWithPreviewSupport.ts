@@ -1,30 +1,27 @@
-import type { Readable } from 'svelte/store';
+import type { Readable } from 'svelte/store'
 
 // ´QueryStore´ is imported from runtime folder to avoid a circular dependency issue.
 // See: https://github.com/HoudiniGraphql/houdini/issues/818#issuecomment-1382295422
-import { isBrowser, QueryStore } from '$houdini/plugins/houdini-svelte/runtime';
-import type { GraphQLObject, QueryArtifact, QueryResult } from '$houdini/runtime/lib/types';
-import {
-	type StoreConfig,
-	fetchParams
-} from '$houdini/plugins/houdini-svelte/runtime/stores/query';
+import { isBrowser, QueryStore } from '$houdini/plugins/houdini-svelte/runtime'
+import type { GraphQLObject, QueryArtifact, QueryResult } from '$houdini/runtime/lib/types'
+import { type StoreConfig, fetchParams } from '$houdini/plugins/houdini-svelte/runtime/stores/query'
 
 import {
 	subscribeToQuery,
 	type ChannelErrorData,
 	type ConnectionStatus,
 	type UnsubscribeFn
-} from 'datocms-listen';
+} from 'datocms-listen'
 
-import { Preview, PREVIEW_MODE_COOKIE_NAME } from '$lib/preview';
+import { Preview, PREVIEW_MODE_COOKIE_NAME } from '$lib/preview'
 
 // This type is meant to store information about
 // the usage of the Real-time Updates.
 type RealTimeUpdatesApi = null | {
 	// This field is used to store the function that must be called
 	// to gracefully close the connection to Real-time Updates API.
-	unsubscribeFunction: UnsubscribeFn;
-};
+	unsubscribeFunction: UnsubscribeFn
+}
 
 // This is the query store that is used as parent for all the query stores
 // that Houdini creates when it finds GraphQL queries. This is done by using
@@ -38,36 +35,36 @@ export class QueryStoreWithPreviewSupport<
 	_Input extends object,
 	_ExtraFields = { error: ChannelErrorData; connectionStatus: ConnectionStatus }
 > extends QueryStore<_Data, _Input, _ExtraFields> {
-	enablePreview = false;
+	enablePreview = false
 
-	realTimeUpdatesApi: RealTimeUpdatesApi = null;
+	realTimeUpdatesApi: RealTimeUpdatesApi = null
 
-	fetchFunction: typeof window.fetch | null = null;
+	fetchFunction: typeof window.fetch | null = null
 
 	constructor({ artifact, storeName, variables }: StoreConfig<_Data, _Input, QueryArtifact>) {
 		super({
 			artifact,
 			storeName,
 			variables
-		});
+		})
 
 		this.store.update((storeState) => ({
 			...storeState,
 			connectionStatus: 'closed',
 			error: null
-		}));
+		}))
 
 		if (isBrowser) {
 			// See: https://developer.mozilla.org/en-US/docs/web/api/document/cookie#example_2_get_a_sample_cookie_named_test2
 			const cookie = document.cookie
 				?.split('; ')
 				.find((row) => row.startsWith(`${PREVIEW_MODE_COOKIE_NAME}=`))
-				?.split('=')[1];
+				?.split('=')[1]
 
-			const isPreview = !!cookie;
+			const isPreview = !!cookie
 
 			if (isPreview) {
-				this.enablePreview = true;
+				this.enablePreview = true
 			}
 		}
 	}
@@ -76,12 +73,12 @@ export class QueryStoreWithPreviewSupport<
 		// Here, the `fetch` function which is used at the first fetch is stored
 		// as an attribute of the instance. The goal is to pass it later as a fetcher when subscribing to
 		// the GraphQL subscription channel.
-		const { context } = await fetchParams(this.artifact, this.storeName, { ...args[0] });
-		const { fetch } = context;
+		const { context } = await fetchParams(this.artifact, this.storeName, { ...args[0] })
+		const { fetch } = context
 
-		this.fetchFunction = fetch;
+		this.fetchFunction = fetch
 
-		return super.fetch(...args);
+		return super.fetch(...args)
 	}
 
 	// The new behaviour of the store is introduced overriding the `subscribe` method:
@@ -94,24 +91,24 @@ export class QueryStoreWithPreviewSupport<
 		if (isBrowser && this.enablePreview) {
 			// ...we call `subscribe` method of the parent class and we store
 			// the unsubscribe function for further usage.
-			const unsubscribe = super.subscribe(...args);
+			const unsubscribe = super.subscribe(...args)
 
 			// Then subscribe to Real-time Update API.
-			this.subscribeToRealTimeUpdateAPI();
+			this.subscribeToRealTimeUpdateAPI()
 
 			// Finally, we return a new unsubscribe function that, when called, ...
 			return () => {
 				// First, calls the unsubscribe function returned by the parent class.
-				unsubscribe();
+				unsubscribe()
 
 				// Then, only if the number of subscribers dropped to 0,
 				// we call the function that stops listening to Real-time Update API.
 				if (this.subscriberCount <= 0) {
-					this.unsubscribeFronRealTimeUpdateAPI();
+					this.unsubscribeFronRealTimeUpdateAPI()
 				}
-			};
+			}
 		} else {
-			return super.subscribe(...args);
+			return super.subscribe(...args)
 		}
 	}
 
@@ -120,12 +117,11 @@ export class QueryStoreWithPreviewSupport<
 			this.store.update((storeState) => ({
 				...storeState,
 				connectionStatus: 'connecting'
-			}));
-
-			(async () => {
+			}))
+			;(async () => {
 				const preview = (await (this.fetchFunction ?? fetch)('/preview').then((response) =>
 					response.json()
-				)) as Preview;
+				)) as Preview
 
 				if (preview.enabled) {
 					const unsubscribeFunction = await subscribeToQuery({
@@ -147,7 +143,7 @@ export class QueryStoreWithPreviewSupport<
 							this.store.update((storeState) => ({
 								...storeState,
 								connectionStatus: status
-							}));
+							}))
 						},
 						onUpdate: (update) => {
 							// This is the main callback that updates store data when new data
@@ -156,7 +152,7 @@ export class QueryStoreWithPreviewSupport<
 								...storeState,
 								data: update.response.data,
 								error: null
-							}));
+							}))
 						},
 						onChannelError: (error) => {
 							// In case of issues on the channel, we set data to `null`
@@ -165,22 +161,22 @@ export class QueryStoreWithPreviewSupport<
 								...storeState,
 								data: null,
 								error: error
-							}));
+							}))
 						}
-					});
+					})
 
 					this.realTimeUpdatesApi = {
 						unsubscribeFunction
-					};
+					}
 				}
-			})();
+			})()
 		}
 	}
 
 	private unsubscribeFronRealTimeUpdateAPI() {
 		if (this.realTimeUpdatesApi) {
-			this.realTimeUpdatesApi.unsubscribeFunction();
-			this.realTimeUpdatesApi = null;
+			this.realTimeUpdatesApi.unsubscribeFunction()
+			this.realTimeUpdatesApi = null
 		}
 	}
 }

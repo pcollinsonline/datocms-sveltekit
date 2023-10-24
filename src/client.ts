@@ -1,9 +1,9 @@
-import { HoudiniClient, type RequestHandler } from '$houdini';
+import { HoudiniClient, type RequestHandler } from '$houdini'
 
-import { PUBLIC_DATOCMS_API_TOKEN } from '$env/static/public';
+import { PUBLIC_DATOCMS_API_TOKEN } from '$env/static/public'
 
 const requestHandler: RequestHandler = async ({ fetch, text = '', variables = {} }) => {
-	const url = 'https://graphql.datocms.com/';
+	const url = 'https://graphql.datocms.com/'
 	//           ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 	// Make sure that GraphQL API URL declared here looks exactly the same as
 	// the one the SvelteKit uses for storing hydrating data in HTML:
@@ -26,9 +26,9 @@ const requestHandler: RequestHandler = async ({ fetch, text = '', variables = {}
 			query: text,
 			variables
 		})
-	});
+	})
 
-	return await result.json();
-};
+	return await result.json()
+}
 
-export default new HoudiniClient(requestHandler);
+export default new HoudiniClient(requestHandler)

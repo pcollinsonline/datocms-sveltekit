@@ -6,7 +6,7 @@ const config = {
 
 	schemaPollHeaders: {
 		Authorization(env) {
-			return `Bearer ${env.PUBLIC_DATOCMS_API_TOKEN}`;
+			return `Bearer ${env.PUBLIC_DATOCMS_API_TOKEN}`
 		}
 	},
 
@@ -64,6 +64,6 @@ const config = {
 			type: 'string'
 		}
 	}
-};
+}
 
-export default config;
+export default config

@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { fragment, graphql, type StructuredTextFragment } from '$houdini';
+	import { fragment, graphql, type StructuredTextFragment } from '$houdini'
 
-	import { StructuredText } from '@datocms/svelte';
+	import { StructuredText } from '@datocms/svelte'
 
-	import { isBlock } from 'datocms-structured-text-utils';
+	import { isBlock } from 'datocms-structured-text-utils'
 
-	import Block from './StructuredText/nodes/Block.svelte';
+	import Block from './StructuredText/nodes/Block.svelte'
 
-	export let structuredText: StructuredTextFragment;
+	export let structuredText: StructuredTextFragment
 
 	$: structuredTextFragment = fragment(
 		structuredText,
@@ -33,11 +33,11 @@
 				}
 			}
 		`)
-	);
+	)
 </script>
 
 <div class="max-w-2xl mx-auto">
 	<div class="prose prose-lg prose-blue" id="main-content">
-		<StructuredText data={$structuredTextFragment} components={[[isBlock, Block]]} />
+		<StructuredText data="{$structuredTextFragment}" components="{[[isBlock, Block]]}" />
 	</div>
 </div>

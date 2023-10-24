@@ -4,15 +4,13 @@
 		A statically generated blog example using{' '}
 		<a
 			href="https://kit.svelte.dev/"
-			class="underline hover:text-success duration-200 transition-colors"
-		>
+			class="underline hover:text-success duration-200 transition-colors">
 			SvelteKit
 		</a>{' '}
 		and{' '}
 		<a
 			href="https://www.datocms.com/"
-			class="underline hover:text-success duration-200 transition-colors"
-		>
+			class="underline hover:text-success duration-200 transition-colors">
 			DatoCMS
 		</a>
 		.
