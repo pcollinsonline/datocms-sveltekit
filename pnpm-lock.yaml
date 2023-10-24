@@ -56,11 +56,11 @@ devDependencies:
     specifier: ^15.8.0
     version: 15.8.0
   houdini:
-    specifier: ^1.0.0
-    version: 1.0.0
+    specifier: ^1.1.0
+    version: 1.1.0
   houdini-svelte:
-    specifier: ^1.0.0
-    version: 1.0.0
+    specifier: ^1.1.0
+    version: 1.1.0
   postcss:
     specifier: ^8.4.20
     version: 8.4.31
@@ -2339,15 +2339,15 @@ packages:
       lru-cache: 6.0.0
     dev: false
 
-  /houdini-svelte@1.0.0:
-    resolution: {integrity: sha512-EKWL80awFso/9XweXK4/3J8Jc/JPSDoBXlQTq4bX0OyUH+iwec+M/e8tzz/n0XgFRjqFnH6FnbnR9uvyqPUTDQ==}
+  /houdini-svelte@1.1.0:
+    resolution: {integrity: sha512-T7MRjfHWdaMYdKkrizvvyWwJ8g5CI8+RBOu+2VfDXoTraWNTwWpiOSE5rrmb2AMgR+PZL7C+zcFDWG/9ots4ew==}
     dependencies:
       '@kitql/helper': 0.5.0
       '@sveltejs/kit': 1.27.0(svelte@3.59.2)(vite@4.5.0)
       ast-types: 0.16.1
       estree-walker: 3.0.3
       graphql: 15.8.0
-      houdini: 1.0.0
+      houdini: 1.1.0
       recast: 0.23.4
       rollup: 3.29.4
       svelte: 3.59.2
@@ -2363,8 +2363,8 @@ packages:
       - terser
     dev: true
 
-  /houdini@1.0.0:
-    resolution: {integrity: sha512-FveNpVCRVHwC8An/1QNWTx/vfFfOBTLpmaB2gGEl4ko45FIBwDv9kAlp/GIqqd2BkErZ28yPTI00At4qwBLWYg==}
+  /houdini@1.1.0:
+    resolution: {integrity: sha512-1fVMMa6vsQipo6kbmqt25iLInB/PnXBOA3mwoYDBx636aSk3x365NjZ12tyyRhhGjlEFQq/+pqnn5qakrs+DxQ==}
     hasBin: true
     dependencies:
       '@babel/parser': 7.23.0
