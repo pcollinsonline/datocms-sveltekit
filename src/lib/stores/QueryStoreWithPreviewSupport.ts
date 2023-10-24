@@ -80,6 +80,7 @@ export class QueryStoreWithPreviewSupport<
 	// the new one will normally call the one in the parent class, unless some conditions are met.
 	// If that's the case, a request to subscribe to Real-time Updates API is triggered.
 	subscribe(...args: Parameters<Readable<QueryResult<_Data, _Input>>['subscribe']>): () => void {
+		this.#_subscriberCount += 1
 		// If code is running in the browser, and preview mode is enabled...
 		if (isBrowser && this.enablePreview) {
 			// ...we call `subscribe` method of the parent class and we store
@@ -99,6 +100,7 @@ export class QueryStoreWithPreviewSupport<
 				if (this.#_subscriberCount <= 0) {
 					this.unsubscribeFronRealTimeUpdateAPI()
 				}
+				this.#_subscriberCount -= 1
 			}
 		} else {
 			return super.subscribe(...args)
